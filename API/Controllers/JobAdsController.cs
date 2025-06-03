@@ -16,8 +16,7 @@ public class JobAdsController : ControllerBase
     {
         _context = context;
     }
-
-    // GET: api/JobAds
+    
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -38,8 +37,7 @@ public class JobAdsController : ControllerBase
 
         return Ok(jobAds);
     }
-
-    // GET: api/JobAds/5
+    
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
@@ -52,8 +50,7 @@ public class JobAdsController : ControllerBase
 
         return Ok(jobAd);
     }
-
-    // POST: api/JobAds
+    
     [HttpPost]
     public async Task<IActionResult> Create(JobAdDto dto)
     {
@@ -74,8 +71,7 @@ public class JobAdsController : ControllerBase
 
         return CreatedAtAction(nameof(GetById), new { id = jobAd.Id }, jobAd);
     }
-
-    // PUT: api/JobAds/5
+    
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, JobAdDto dto)
     {
@@ -90,8 +86,7 @@ public class JobAdsController : ControllerBase
         jobAd.Description = dto.Description;
         jobAd.ExpirationDate = dto.ExpirationDate;
         jobAd.CompanyId = dto.CompanyId;
-
-        // Update skills
+        
         jobAd.JobAdSkills.Clear();
         foreach (var skillId in dto.SkillIds)
         {
@@ -101,8 +96,7 @@ public class JobAdsController : ControllerBase
         await _context.SaveChangesAsync();
         return NoContent();
     }
-
-    // DELETE: api/JobAds/5
+    
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {

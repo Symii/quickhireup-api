@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using quickhireup_api.Application.Interfaces;
+using quickhireup_api.Models.Request;
 
 namespace quickhireup_api.API.Controllers
 {
@@ -32,11 +33,5 @@ namespace quickhireup_api.API.Controllers
             
             return Ok(new { Description = description });
         }
-    }
-
-    public class JobDescriptionRequest
-    {
-        public string Position { get; set; }
-        public string Location { get; set; }
     }
 }
