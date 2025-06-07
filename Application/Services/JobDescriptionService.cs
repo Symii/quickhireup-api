@@ -1,23 +1,23 @@
 ﻿using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using quickhireup_api.Application.Interfaces;
+using quickhireup_api.Models.Request;
 
 namespace quickhireup_api.Application.Services
 {
-    public class JobDescriptionService : IJobDescriptionService
+    public class JobDescriptionService(IHttpClientFactory httpClientFactory) : IJobDescriptionService
     {
-        private readonly HttpClient _httpClient;
+        private readonly HttpClient _httpClient = httpClientFactory.CreateClient();
 
-        public JobDescriptionService(IHttpClientFactory httpClientFactory)
+        public async Task<string> GenerateJobDescriptionAsync(JobDescriptionRequest jobDescriptionRequest)
         {
-            _httpClient = httpClientFactory.CreateClient();
-        }
-
-        public async Task<string> GenerateJobDescriptionAsync(string position, string location)
-        {
-            var prompt = $"Napisz profesjonalne ogłoszenie o pracę w języku polskim dla stanowiska {{position}} w lokalizacji {{location}}. Uwzględnij wymagania, obowiązki i benefity.";
-
+            var prompt = $"Napisz profesjonalne ogłoszenie o pracę w języku polskim dla stanowiska {jobDescriptionRequest.JobTitle} " +
+                         $"w lokalizacji {jobDescriptionRequest.Location}. " +
+                         $"Rodzaj zatrudnienia: {jobDescriptionRequest.EmploymentType}. " +
+                         $"Rodzaj umowy: {jobDescriptionRequest.ContractType}. " +
+                         $"Doświadczenie zawodowe: {jobDescriptionRequest.Experience}. " +
+                         $"Uwzględnij obowiązki, wymagania i benefity.";
+            
             var requestBody = new
             {
                 model = "mistral",

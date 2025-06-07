@@ -10,17 +10,17 @@ namespace quickhireup_api.API.Controllers;
 [Route("api/[controller]")]
 public class JobAdsController : ControllerBase
 {
-    private readonly AppDbContext _context;
+    private AppDbContext _ctx;
 
-    public JobAdsController(AppDbContext context)
+    public JobAdsController(AppDbContext ctx)
     {
-        _context = context;
+        _ctx = ctx;
     }
-    
+        
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var jobAds = await _context.JobAds
+        var jobAds = await _ctx.JobAds
             .Include(j => j.Company)
             .Include(j => j.JobAdSkills)
                 .ThenInclude(jas => jas.Skill)
@@ -41,12 +41,14 @@ public class JobAdsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var jobAd = await _context.JobAds
+        var jobAd = await _ctx.JobAds
             .Include(j => j.JobAdSkills)
             .FirstOrDefaultAsync(j => j.Id == id);
 
-        if (jobAd == null)
+        if (jobAd is null)
+        {
             return NotFound();
+        }
 
         return Ok(jobAd);
     }
@@ -66,8 +68,8 @@ public class JobAdsController : ControllerBase
             }).ToList()
         };
 
-        _context.JobAds.Add(jobAd);
-        await _context.SaveChangesAsync();
+        _ctx.JobAds.Add(jobAd);
+        await _ctx.SaveChangesAsync();
 
         return CreatedAtAction(nameof(GetById), new { id = jobAd.Id }, jobAd);
     }
@@ -75,12 +77,14 @@ public class JobAdsController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, JobAdDto dto)
     {
-        var jobAd = await _context.JobAds
+        var jobAd = await _ctx.JobAds
             .Include(j => j.JobAdSkills)
             .FirstOrDefaultAsync(j => j.Id == id);
 
-        if (jobAd == null)
+        if (jobAd is null)
+        {
             return NotFound();
+        }
 
         jobAd.Title = dto.Title;
         jobAd.Description = dto.Description;
@@ -93,19 +97,21 @@ public class JobAdsController : ControllerBase
             jobAd.JobAdSkills.Add(new JobAdSkill { SkillId = skillId });
         }
 
-        await _context.SaveChangesAsync();
+        await _ctx.SaveChangesAsync();
         return NoContent();
     }
     
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var jobAd = await _context.JobAds.FindAsync(id);
-        if (jobAd == null)
+        var jobAd = await _ctx.JobAds.FindAsync(id);
+        if (jobAd is null)
+        {
             return NotFound();
+        }
 
-        _context.JobAds.Remove(jobAd);
-        await _context.SaveChangesAsync();
+        _ctx.JobAds.Remove(jobAd);
+        await _ctx.SaveChangesAsync();
         return NoContent();
     }
 }

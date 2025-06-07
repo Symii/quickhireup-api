@@ -1,9 +1,10 @@
-﻿namespace quickhireup_api.Data;
-
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Models;
+using quickhireup_api.Models;
 
-public class AppDbContext : DbContext
+namespace quickhireup_api.Data;
+
+public class AppDbContext : IdentityDbContext<User>
 {
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options) { }

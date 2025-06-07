@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using quickhireup_api.Application.Interfaces;
+using quickhireup_api.Application.Services;
 using quickhireup_api.Models.Request;
 
 namespace quickhireup_api.API.Controllers
@@ -14,22 +14,11 @@ namespace quickhireup_api.API.Controllers
         {
             _jobDescriptionService = jobDescriptionService;
         }
-
-        [HttpGet("test")]
-        public async Task<IActionResult> Test()
-        {
-            var position = "Frontend Developer";
-            var location = "Warszawa";
-
-            var description = await _jobDescriptionService.GenerateJobDescriptionAsync(position, location);
-            
-            return Ok(new { Description = description });
-        }
-
+        
         [HttpPost("generate")]
-        public async Task<IActionResult> GenerateJobDescription([FromBody] JobDescriptionRequest request)
+        public async Task<IActionResult> GenerateJobDescription([FromBody] JobDescriptionRequest jobDescriptionRequest)
         {
-            var description = await _jobDescriptionService.GenerateJobDescriptionAsync(request.Position, request.Location);
+            var description = await _jobDescriptionService.GenerateJobDescriptionAsync(jobDescriptionRequest);
             
             return Ok(new { Description = description });
         }

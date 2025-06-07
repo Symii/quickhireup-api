@@ -1,25 +1,12 @@
-﻿namespace quickhireup_api.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace quickhireup_api.Models
 {
     /// <summary>
     /// Reprezentuje użytkownika systemu.
     /// </summary>
-    public class User
+    public class User : IdentityUser
     {
-        /// <summary>
-        /// Unikalny identyfikator użytkownika.
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
-        /// Adres e-mail użytkownika, wykorzystywany do logowania.
-        /// </summary>
-        public string Email { get; set; }
-
-        /// <summary>
-        /// Zahasłowany ciąg znaków reprezentujący hasło użytkownika.
-        /// </summary>
-        public string PasswordHash { get; set; }
-
         /// <summary>
         /// Rola przypisana użytkownikowi (np. "Admin", "Recruiter", "Candidate").
         /// </summary>
@@ -29,5 +16,25 @@
         /// Lista CV przypisanych do użytkownika.
         /// </summary>
         public virtual ICollection<CV> CVs { get; set; }
+
+        /// <summary>
+        /// Imię użytkownika.
+        /// </summary>
+        public string FirstName { get; set; }
+        
+        /// <summary>
+        /// Nazwisko użytkownika.
+        /// </summary>
+        public string SecondName { get; set; }
+        
+        /// <summary>
+        /// Token odświeżający używany do przedłużenia sesji użytkownika.
+        /// </summary>
+        public string? RefreshToken { get; set; }
+
+        /// <summary>
+        /// Data i godzina wygaśnięcia tokena odświeżającego.
+        /// </summary>
+        public DateTime RefreshTokenExpiryTime { get; set; }
     }
 }
